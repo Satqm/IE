@@ -280,7 +280,7 @@
     max-width: 520px;
   }
 
-  .smart-right { display: flex; flex-direction: column; gap: 16px; align-items: stretch; }
+  .smart-right { display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
 
   .dur-chips {
     display: flex;
@@ -307,6 +307,33 @@
     border-color: transparent;
     box-shadow: 0 8px 24px -10px rgba(255,255,255,.8);
   }
+
+  .dur-custom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px 6px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.09);
+    border: 1px solid rgba(255,255,255,.18);
+    width: fit-content;
+    margin-left: auto;
+  }
+  .dur-custom input {
+    width: 52px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+  }
+  .dur-custom input::-webkit-outer-spin-button,
+  .dur-custom input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .dur-custom input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+  .dur-custom span { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
 
   .smart-start {
     font: inherit;
@@ -590,7 +617,7 @@
   }
 
   /* =========================================================
-     YOUTUBE FLOATING BAR
+     YOUTUBE FLOATING BAR  (home page only)
      ========================================================= */
   .yt-float {
     position: fixed;
@@ -610,7 +637,7 @@
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: 0 14px 40px -16px rgba(20,25,40,.35);
     color: #1f2937;
-    transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease, background .4s ease;
+    transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease, background .4s ease, opacity .3s ease;
     animation: ytFloatIn .9s cubic-bezier(.22,1,.36,1) both;
   }
   body.theme-dark .yt-float {
@@ -663,6 +690,7 @@
   body.theme-dark .yt-handle { border-left-color: rgba(255,255,255,.14); }
   .yt-float:hover .yt-handle { opacity: 1; color: #d61f43; }
 
+  /* Hide YT bar whenever we leave the welcome view */
   body.in-breath .yt-float,
   body.recording .yt-float { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(24px); }
 
@@ -953,6 +981,12 @@
     box-shadow: 0 0 10px var(--phase-color);
     transition: background .55s ease, box-shadow .55s ease;
   }
+
+  /* Nadi Shodhana special visual */
+  #nadiLayer { display: none; }
+  #nadiLayer.show { display: block; }
+  .nadi-nostril { transition: fill .5s ease, opacity .5s ease; }
+  .nadi-air { transition: opacity .35s ease; }
 
   /* =========================================================
      BREATH VIEW CHROME
@@ -1265,6 +1299,30 @@
   }
   body.theme-dark .sp-hint kbd { color: #c4b5fd; background: rgba(196,181,253,.12); }
 
+  /* Support link inside settings */
+  .yt-support {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255,47,69,.06);
+    border: 1px solid rgba(255,47,69,.15);
+    transition: background .25s ease, transform .25s ease;
+  }
+  body.theme-dark .yt-support {
+    background: rgba(255,47,69,.10);
+    border-color: rgba(255,47,69,.22);
+  }
+  .yt-support:hover { background: rgba(255,47,69,.14); transform: translateY(-1px); }
+  .yt-support .yt-ico { width: 30px; height: 30px; }
+  .yt-support .yt-ico svg { width: 15px; height: 15px; }
+  .yt-support-text { display: flex; flex-direction: column; }
+  .yt-support-text strong { font-size: 13.5px; font-weight: 700; }
+  .yt-support-text small { font-size: 11.5px; opacity: .55; margin-top: 2px; }
+
   /* =========================================================
      DASHBOARD MODAL
      ========================================================= */
@@ -1377,7 +1435,6 @@
   }
   body.lang-hi .dash-section h4 { letter-spacing: 0; font-size: 12px; }
 
-  /* Bar chart */
   .chart-bars {
     display: flex;
     align-items: flex-end;
@@ -1429,7 +1486,6 @@
     text-transform: uppercase;
   }
 
-  /* Technique breakdown */
   .tech-rows { display: flex; flex-direction: column; gap: 11px; }
   .tech-row { display: flex; align-items: center; gap: 12px; }
   .tech-swatch {
@@ -1470,7 +1526,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Recent sessions */
   .recent-list { display: flex; flex-direction: column; gap: 8px; }
   .recent-item {
     display: flex;
@@ -1581,6 +1636,7 @@
   @media (max-width: 860px) {
     .smart-card { grid-template-columns: 1fr; gap: 20px; padding: 24px 22px; }
     .dur-chips { justify-content: flex-start; }
+    .dur-custom { margin-left: 0; }
   }
 
   @media (max-width: 720px) {
@@ -1668,6 +1724,10 @@
           <button data-min="15">15 min</button>
           <button data-min="20">20 min</button>
         </div>
+        <div class="dur-custom">
+          <input type="number" id="customMin" min="1" max="60" value="8" aria-label="Custom minutes" />
+          <span data-i18n="smart.customMin">min</span>
+        </div>
         <button class="smart-start" id="smartStart">
           <span data-i18n="smart.start">Start Session</span>
           <span class="arrow">→</span>
@@ -1740,6 +1800,34 @@
           </filter>
         </defs>
 
+        <g id="nadiLayer">
+          <!-- Stylised face / nose for Nadi Shodhana -->
+          <g id="nadiFace">
+            <!-- Head outline -->
+            <ellipse cx="800" cy="430" rx="130" ry="175" fill="none" stroke="var(--phase-color)" stroke-width="2.5" opacity=".22"/>
+            <!-- Nose bridge -->
+            <path d="M800,300 L800,400" stroke="var(--phase-color)" stroke-width="2.5" opacity=".35" fill="none"/>
+            <!-- Nose tip -->
+            <ellipse cx="800" cy="420" rx="22" ry="12" fill="none" stroke="var(--phase-color)" stroke-width="2" opacity=".35"/>
+            <!-- Left nostril -->
+            <ellipse id="nadiLeft" class="nadi-nostril" cx="772" cy="432" rx="13" ry="9" fill="var(--phase-color)" opacity=".22"/>
+            <!-- Right nostril -->
+            <ellipse id="nadiRight" class="nadi-nostril" cx="828" cy="432" rx="13" ry="9" fill="var(--phase-color)" opacity=".22"/>
+            <!-- Left airflow -->
+            <g id="nadiLeftAir" class="nadi-air" opacity="0">
+              <line x1="748" y1="432" x2="700" y2="432" stroke="var(--phase-color)" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+              <line x1="748" y1="422" x2="706" y2="422" stroke="var(--phase-color)" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+              <line x1="748" y1="442" x2="706" y2="442" stroke="var(--phase-color)" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+            </g>
+            <!-- Right airflow -->
+            <g id="nadiRightAir" class="nadi-air" opacity="0">
+              <line x1="852" y1="432" x2="900" y2="432" stroke="var(--phase-color)" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+              <line x1="852" y1="422" x2="894" y2="422" stroke="var(--phase-color)" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+              <line x1="852" y1="442" x2="894" y2="442" stroke="var(--phase-color)" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+            </g>
+          </g>
+        </g>
+
         <g id="ringsLayer"></g>
         <g id="tracksLayer"></g>
 
@@ -1786,7 +1874,7 @@
 
 </section>
 
-<!-- ============ YOUTUBE SUBSCRIBE BAR ============ -->
+<!-- ============ YOUTUBE SUBSCRIBE BAR (home page only) ============ -->
 <a class="yt-float" id="ytFloat"
    href="https://youtube.com/@radhe.jaiguru?si=t7Y9O6IFvjOyD_y2"
    target="_blank" rel="noopener noreferrer"
@@ -1840,6 +1928,17 @@
       </div>
 
       <div class="sp-row" style="margin-top:16px;">
+        <span class="sp-row-label" data-i18n="settings.soundProfile">Sound profile</span>
+      </div>
+      <div class="seg" id="soundSeg" style="width:100%;justify-content:space-between;">
+        <button data-sound="ambient" data-i18n="sound.ambient">Ambient</button>
+        <button data-sound="solfeggio" data-i18n="sound.solfeggio">Solfeggio</button>
+        <button data-sound="binaural" data-i18n="sound.binaural">Binaural</button>
+        <button data-sound="full" class="active" data-i18n="sound.full">Full</button>
+      </div>
+      <p class="sp-hint" data-i18n="settings.soundHint">Solfeggio tones resonate with specific energy centres. Binaural beats gently entrain brainwaves (Theta for calm, Beta for focus).</p>
+
+      <div class="sp-row" style="margin-top:16px;">
         <span class="sp-row-label" data-i18n="settings.volume">Volume</span>
         <span class="sp-row-label" id="volDisplay" style="opacity:.55;font-size:12px;">55%</span>
       </div>
@@ -1854,6 +1953,21 @@
         <span class="sp-row-label" data-i18n="settings.border">Frame border</span>
         <div class="toggle-switch on" id="borderSwitch" role="switch" aria-checked="true"></div>
       </div>
+    </div>
+
+    <div class="sp-section">
+      <div class="sp-label" data-i18n="settings.support">Support</div>
+      <a class="yt-support" href="https://youtube.com/@radhe.jaiguru?si=t7Y9O6IFvjOyD_y2" target="_blank" rel="noopener noreferrer">
+        <span class="yt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6z"/>
+          </svg>
+        </span>
+        <span class="yt-support-text">
+          <strong data-i18n="settings.ytSupport">Support us on YouTube</strong>
+          <small>@radhe.jaiguru</small>
+        </span>
+      </a>
     </div>
 
     <div class="sp-section">
@@ -1973,17 +2087,26 @@
       'settings.audio': 'Audio',
       'settings.chime': 'Phase chime',
       'settings.drone': 'Ambient drone',
+      'settings.soundProfile': 'Sound profile',
       'settings.volume': 'Volume',
       'settings.audioHint': 'The chime marks each phase transition. The drone is a soft continuous bed that shifts with your breath.',
+      'settings.soundHint': 'Solfeggio tones resonate with specific energy centres. Binaural beats gently entrain brainwaves (Theta for calm, Beta for focus).',
       'settings.visual': 'Visual',
       'settings.border': 'Frame border',
+      'settings.support': 'Support',
+      'settings.ytSupport': 'Support us on YouTube',
       'settings.shortcuts': 'Keyboard shortcuts',
       'settings.shortcutsList': 'Space — Play / Pause · 1–8 — Switch pattern · 0 — Back · D — Stats · R — Recording · S — Settings · L — Language · B — Border · Esc — Exit',
+      'sound.ambient': 'Ambient',
+      'sound.solfeggio': 'Solfeggio',
+      'sound.binaural': 'Binaural',
+      'sound.full': 'Full',
       'smart.badge': 'Auto-sequenced',
       'smart.title': 'Smart Session',
       'smart.desc': 'Pick a length. We build a complete routine from the eight techniques — energising, focusing, then calming — and guide you through it without a single tap.',
       'smart.start': 'Start Session',
       'smart.min': 'min',
+      'smart.customMin': 'min',
       'yt.subscribe': 'Subscribe',
       'dash.title': 'Your Practice',
       'dash.sub': 'Every session is stored locally on this device.',
@@ -2029,17 +2152,26 @@
       'settings.audio': 'ऑडियो',
       'settings.chime': 'चरण घंटी',
       'settings.drone': 'परिवेश ध्वनि',
+      'settings.soundProfile': 'ध्वनि प्रोफ़ाइल',
       'settings.volume': 'आवाज़',
       'settings.audioHint': 'घंटी हर चरण परिवर्तन को चिह्नित करती है। परिवेश ध्वनि एक कोमल निरंतर ध्वनि है जो आपकी साँस के साथ बदलती है।',
+      'settings.soundHint': 'सोल्फ़ेजियो स्वर विशिष्ट ऊर्जा केंद्रों के साथ अनुनाद करते हैं। बायनॉरल बीट्स धीरे-धीरे मस्तिष्क तरंगों को प्रशिक्षित करते हैं (शांति के लिए थीटा, फोकस के लिए बीटा)।',
       'settings.visual': 'दृश्य',
       'settings.border': 'फ़्रेम बॉर्डर',
+      'settings.support': 'सहयोग',
+      'settings.ytSupport': 'YouTube पर सहयोग करें',
       'settings.shortcuts': 'कीबोर्ड शॉर्टकट',
       'settings.shortcutsList': 'Space — चलाएँ/रोकें · 1–8 — पैटर्न · 0 — वापस · D — आँकड़े · R — रिकॉर्डिंग · S — सेटिंग्स · L — भाषा · B — बॉर्डर · Esc — बाहर',
+      'sound.ambient': 'परिवेश',
+      'sound.solfeggio': 'सोल्फ़ेजियो',
+      'sound.binaural': 'बायनॉरल',
+      'sound.full': 'पूर्ण',
       'smart.badge': 'स्वतः क्रम',
       'smart.title': 'स्मार्ट सेशन',
       'smart.desc': 'अवधि चुनें। हम आठ तकनीकों से एक पूरा क्रम बनाएँगे — ऊर्जा, एकाग्रता, फिर शांति — और बिना किसी टैप के आपको पूरा कराएँगे।',
       'smart.start': 'सेशन शुरू करें',
       'smart.min': 'मिनट',
+      'smart.customMin': 'मिनट',
       'yt.subscribe': 'सब्सक्राइब',
       'dash.title': 'आपका अभ्यास',
       'dash.sub': 'हर सेशन इस डिवाइस पर ही सुरक्षित रहता है।',
@@ -2107,6 +2239,8 @@
         ],
         how: '4 सेकंड श्वास लें → 4 सेकंड रोकें → 4 सेकंड छोड़ें → 4 सेकंड रोकें। दोहराएँ। समान लय हृदय गति को स्थिर करती है।'
       },
+      solfeggio: 528,
+      binaural: 14,
       hud:   { labelX: 800, labelY: 342, labelSize: 58, numX: 800, numY: 512, numSize: 168 },
       rings: { cx: 800, cy: 450, base: [128, 188, 248] },
       base:  { shape: 'rect', attrs: { x: 550, y: 200, width: 500, height: 500 } },
@@ -2146,6 +2280,8 @@
         ],
         how: '4 सेकंड श्वास लें → 4 सेकंड रोकें → 4 सेकंड छोड़ें। बॉक्स की तरह अंत में विराम नहीं — चक्र तीन समान भुजाओं में लगातार बहता है।'
       },
+      solfeggio: 741,
+      binaural: 10,
       hud:   { labelX: 800, labelY: 486, labelSize: 44, numX: 800, numY: 604, numSize: 122 },
       rings: { cx: 800, cy: 540, base: [112, 166, 220] },
       base:  { shape: 'polygon', attrs: { points: '480,720 800,166 1120,720' } },
@@ -2184,6 +2320,8 @@
         ],
         how: 'नाक से 4 सेकंड श्वास लें → 7 सेकंड कोमल रोकें → मुँह से 8 सेकंड धीरे छोड़ें। लंबा निःश्वास पैरासिम्पेथेटिक "विश्राम" प्रणाली को सक्रिय करता है।'
       },
+      solfeggio: 396,
+      binaural: 6,
       hud:   { labelX: 800, labelY: 424, labelSize: 60, numX: 800, numY: 578, numSize: 176 },
       rings: { cx: 800, cy: 450, base: [128, 190, 252] },
       base:  { shape: 'polyline', attrs: { points: '300,700 550,250 1050,250 1300,700' } },
@@ -2222,6 +2360,8 @@
         ],
         how: '5 सेकंड श्वास लें → 5 सेकंड छोड़ें। बस इतना ही। यह गति श्वास, हृदय और रक्तचाप को सहज अनुनाद में जोड़ती है।'
       },
+      solfeggio: 432,
+      binaural: 7.83,
       hud:   { labelX: 400, labelY: 380, labelSize: 72, numX: 400, numY: 548, numSize: 212 },
       rings: { cx: 1200, cy: 450, base: [140, 210, 280] },
       base:  { shape: 'line', attrs: { x1: 1200, y1: 130, x2: 1200, y2: 770 }, dotted: true },
@@ -2259,6 +2399,8 @@
         ],
         how: 'नाक से दो बार श्वास लें (एक पूरा, एक छोटा "सूंघना" फेफड़ों को भरने के लिए) → मुँह से एक लंबा, धीमा निःश्वास। दोहरी श्वास सिकुड़ी वायु थैलियों को फुलाती है; लंबा निःश्वास CO₂ बाहर निकालता है।'
       },
+      solfeggio: 417,
+      binaural: 8,
       hud:   { labelX: 800, labelY: 456, labelSize: 60, numX: 800, numY: 610, numSize: 180 },
       rings: { cx: 800, cy: 520, base: [130, 190, 250] },
       base:  { shape: 'polyline', attrs: { points: '300,700 550,400 750,250 1400,700' } },
@@ -2299,6 +2441,8 @@
         ],
         how: '30 तेज़, गहरी श्वास लें — छोड़ना निष्क्रिय हो। 30वीं श्वास छोड़ने पर जितनी देर आराम से हो सके श्वास रोकें। फिर पूरी श्वास लेकर 15 सेकंड रोकें। दोहराएँ।'
       },
+      solfeggio: 963,
+      binaural: 20,
       hud:   { labelX: 800, labelY: 400, labelSize: 62, numX: 800, numY: 566, numSize: 172 },
       rings: { cx: 800, cy: 455, base: [132, 192, 252] },
       base:  { shape: 'line', attrs: { x1: 800, y1: 210, x2: 800, y2: 700 }, dotted: true },
@@ -2333,6 +2477,8 @@
         ],
         how: 'दायाँ नथुना बंद करें, बाएँ से श्वास लें। बायाँ बंद करें, दाएँ से छोड़ें। दाएँ से श्वास लें। दायाँ बंद करें, बाएँ से छोड़ें। दोहराएँ।'
       },
+      solfeggio: 639,
+      binaural: 6,
       hud:   { labelX: 800, labelY: 432, labelSize: 44, numX: 800, numY: 550, numSize: 126 },
       rings: { cx: 800, cy: 470, base: [108, 158, 208] },
       base:  { shape: 'polygon', attrs: { points: '800,730 440,470 800,210 1160,470' } },
@@ -2374,6 +2520,8 @@
         ],
         how: 'निष्क्रिय, आरामदायक श्वास के साथ तेज़, बलपूर्वक निःश्वास — पेट को अंदर खींचकर।'
       },
+      solfeggio: 852,
+      binaural: 18,
       hud:   { labelX: 800, labelY: 400, labelSize: 60, numX: 800, numY: 566, numSize: 168 },
       rings: { cx: 800, cy: 490, base: [130, 186, 244] },
       base:  { shape: 'line', attrs: { x1: 800, y1: 300, x2: 800, y2: 680 }, dotted: true },
@@ -2439,7 +2587,6 @@
       segs.push({ techId: id, name: tech.name, cycles, seconds });
     });
 
-    // trim overshoot from the tail
     let total = segs.reduce((s, x) => s + x.seconds, 0);
     let guard = 0;
     while (total > totalSec && guard++ < 60) {
@@ -2450,7 +2597,6 @@
         last.seconds -= cyc;
         total -= cyc;
       } else {
-        // try an earlier block
         let trimmed = false;
         for (let i = segs.length - 2; i >= 0; i--) {
           if (segs[i].cycles > 1) {
@@ -2475,6 +2621,7 @@
   const DB_NAME = 'breathwork-studio';
   const DB_VERSION = 1;
   const STORE = 'sessions';
+  const memoryStore = [];
 
   const idb = {
     available: typeof indexedDB !== 'undefined',
@@ -2486,12 +2633,8 @@
       if (this._db) return Promise.resolve(this._db);
       return new Promise((resolve, reject) => {
         let req;
-        try {
-          req = indexedDB.open(DB_NAME, DB_VERSION);
-        } catch (err) {
-          this._failed = true;
-          return reject(err);
-        }
+        try { req = indexedDB.open(DB_NAME, DB_VERSION); }
+        catch (err) { this._failed = true; return reject(err); }
         req.onupgradeneeded = (e) => {
           const db = e.target.result;
           if (!db.objectStoreNames.contains(STORE)) {
@@ -2507,7 +2650,7 @@
           resolve(this._db);
         };
         req.onerror = () => { this._failed = true; reject(req.error); };
-        req.onblocked = () => { /* another tab holds an old version — keep going */ };
+        req.onblocked = () => {};
       });
     },
 
@@ -2517,13 +2660,9 @@
         tx.oncomplete = () => resolve(record);
         tx.onerror = () => reject(tx.error);
         tx.onabort = () => reject(tx.error || new Error('aborted'));
-        try {
-          tx.objectStore(STORE).add(record);
-        } catch (err) {
-          reject(err);
-        }
-      })).catch((err) => {
-        // graceful degradation — memory fallback
+        try { tx.objectStore(STORE).add(record); }
+        catch (err) { reject(err); }
+      })).catch(() => {
         memoryStore.push(record);
         return record;
       });
@@ -2549,8 +2688,6 @@
     }
   };
 
-  const memoryStore = [];
-
   /* =========================================================
      DOM REFS
      ========================================================= */
@@ -2573,6 +2710,11 @@
   const smartBlockLabel = $('smartBlockLabel');
   const smartTime   = $('smartTime');
   const smartFill   = $('smartFill');
+  const nadiLayer   = $('nadiLayer');
+  const nadiLeft    = $('nadiLeft');
+  const nadiRight   = $('nadiRight');
+  const nadiLeftAir = $('nadiLeftAir');
+  const nadiRightAir= $('nadiRightAir');
   const bgLayers    = {};
   $$('.stage-bg').forEach((el) => { bgLayers[el.dataset.bg] = el; });
 
@@ -2598,6 +2740,7 @@
     border: true,
     drone: true,
     chime: false,
+    soundProfile: 'full',
     volume: 0.55,
     inBreathView: false,
     smart: {
@@ -2619,7 +2762,7 @@
   const t = (key) => (I18N[state.lang] && I18N[state.lang][key]) || (I18N.en[key] || key);
 
   /* =========================================================
-     AUDIO ENGINE
+     AUDIO ENGINE — enhanced
      ========================================================= */
   let ac = null;
   let masterGain = null;
@@ -2628,6 +2771,11 @@
   let droneNoise = null;
   let droneOsc = null;
   let droneOscGain = null;
+  let solfeggioOsc = null;
+  let solfeggioGain = null;
+  let binauralLeft = null;
+  let binauralRight = null;
+  let binauralGain = null;
 
   const CHIME_FREQ = { inhale: 587.33, hold: 880.0, exhale: 440.0 };
 
@@ -2638,14 +2786,18 @@
     }
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
-    try {
-      ac = new Ctx();
-    } catch (e) { return; }
+    try { ac = new Ctx(); } catch (e) { return; }
     masterGain = ac.createGain();
     masterGain.gain.value = state.volume;
     masterGain.connect(ac.destination);
     buildDrone();
-    if (state.drone) modulateDrone(getTech().phases[state.phaseIndex] ? getTech().phases[state.phaseIndex].key : 'inhale');
+    buildSolfeggio();
+    buildBinaural();
+    applySoundProfile();
+    if (state.drone) {
+      const ph = getTech().phases[state.phaseIndex];
+      modulateDrone(ph ? ph.key : 'inhale');
+    }
   }
 
   function buildDrone() {
@@ -2681,6 +2833,62 @@
     droneOsc.connect(droneOscGain);
     droneOscGain.connect(droneGain);
     droneOsc.start();
+  }
+
+  function buildSolfeggio() {
+    solfeggioGain = ac.createGain();
+    solfeggioGain.gain.value = 0;
+    solfeggioGain.connect(masterGain);
+    solfeggioOsc = ac.createOscillator();
+    solfeggioOsc.type = 'sine';
+    solfeggioOsc.frequency.value = 528;
+    solfeggioOsc.connect(solfeggioGain);
+    solfeggioOsc.start();
+  }
+
+  function buildBinaural() {
+    binauralGain = ac.createGain();
+    binauralGain.gain.value = 0;
+    binauralGain.connect(masterGain);
+
+    const merger = ac.createChannelMerger(2);
+    binauralLeft = ac.createOscillator();
+    binauralLeft.type = 'sine';
+    binauralLeft.frequency.value = 200;
+    const gL = ac.createGain(); gL.gain.value = 0.5;
+    binauralLeft.connect(gL); gL.connect(merger, 0, 0);
+
+    binauralRight = ac.createOscillator();
+    binauralRight.type = 'sine';
+    binauralRight.frequency.value = 214;
+    const gR = ac.createGain(); gR.gain.value = 0.5;
+    binauralRight.connect(gR); gR.connect(merger, 0, 1);
+
+    merger.connect(binauralGain);
+    binauralLeft.start();
+    binauralRight.start();
+  }
+
+  function applySoundProfile() {
+    if (!ac) return;
+    const p = state.soundProfile;
+    const tech = getTech();
+    const now = ac.currentTime;
+    const hasSolf = (p === 'solfeggio' || p === 'full');
+    const hasBin  = (p === 'binaural'  || p === 'full');
+
+    if (solfeggioGain) solfeggioGain.gain.setTargetAtTime(hasSolf ? 0.08 : 0, now, 0.8);
+    if (binauralGain)  binauralGain.gain.setTargetAtTime(hasBin ? 0.10 : 0, now, 0.8);
+
+    if (hasSolf && solfeggioOsc) {
+      solfeggioOsc.frequency.setTargetAtTime(tech.solfeggio || 528, now, 0.9);
+    }
+    if (hasBin && binauralLeft && binauralRight) {
+      const base = 200;
+      const delta = tech.binaural || 10;
+      binauralLeft.frequency.setTargetAtTime(base, now, 0.9);
+      binauralRight.frequency.setTargetAtTime(base + delta, now, 0.9);
+    }
   }
 
   function modulateDrone(key) {
@@ -2721,32 +2929,60 @@
     }
   }
 
+  /* Rich chime with singing-bowl character */
   function playChime(key, customFreq) {
     if (!ac) return;
     const now = ac.currentTime;
     const base = customFreq || CHIME_FREQ[key] || 528;
     const out = ac.createGain();
     out.gain.setValueAtTime(0.0001, now);
-    out.gain.exponentialRampToValueAtTime(0.26, now + 0.015);
-    out.gain.exponentialRampToValueAtTime(0.0001, now + 2.4);
+    out.gain.exponentialRampToValueAtTime(0.28, now + 0.012);
+    out.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
     out.connect(masterGain);
 
     [
-      { mult: 1.0,  gain: 1.00, type: 'sine' },
-      { mult: 2.0,  gain: 0.32, type: 'sine' },
-      { mult: 3.01, gain: 0.13, type: 'triangle' },
-      { mult: 4.98, gain: 0.05, type: 'sine' }
+      { mult: 1.0,   gain: 1.00, type: 'sine',     detune: 0 },
+      { mult: 2.01,  gain: 0.36, type: 'sine',     detune: 3 },
+      { mult: 3.02,  gain: 0.16, type: 'triangle', detune: -2 },
+      { mult: 4.97,  gain: 0.07, type: 'sine',     detune: 4 },
+      { mult: 6.02,  gain: 0.04, type: 'triangle', detune: -3 }
     ].forEach((p) => {
       const o = ac.createOscillator();
       o.type = p.type;
       o.frequency.value = base * p.mult;
+      if (o.detune) o.detune.value = p.detune;
       const g = ac.createGain();
       g.gain.value = p.gain;
       o.connect(g);
       g.connect(out);
       o.start(now);
-      o.stop(now + 2.6);
+      o.stop(now + 3.4);
     });
+  }
+
+  /* Subtle phase-transition whoosh */
+  function playTransition() {
+    if (!ac) return;
+    const now = ac.currentTime;
+    const dur = 0.5;
+    const buf = ac.createBuffer(1, Math.floor(ac.sampleRate * dur), ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    }
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const f = ac.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.setValueAtTime(400, now);
+    f.frequency.exponentialRampToValueAtTime(1800, now + dur);
+    f.Q.value = 1.2;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.06, now + 0.06);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    src.connect(f); f.connect(g); g.connect(masterGain);
+    src.start(now); src.stop(now + dur + 0.05);
   }
 
   /* =========================================================
@@ -2754,7 +2990,7 @@
      ========================================================= */
   function buildCards() {
     cardsGrid.innerHTML = '';
-    TECHNIQUES.forEach((tech, idx) => {
+    TECHNIQUES.forEach((tech) => {
       const content = tech[state.lang];
       const card = document.createElement('article');
       card.className = 'card';
@@ -2891,6 +3127,26 @@
     hudNum.setAttribute('font-size', h.numSize);
   }
 
+  /* Update the Nadi nostril visual */
+  function updateNadiVisual(label) {
+    if (!nadiLayer) return;
+    const isNadi = (state.techId === 'nadi');
+    nadiLayer.classList.toggle('show', isNadi);
+    if (!isNadi) return;
+
+    const leftActive  = /L/i.test(label) && !/R/i.test(label.split(' ')[1] || '');
+    const rightActive = /R/i.test(label) && !/L/i.test(label.split(' ')[1] || '');
+    const labelParts  = label.split(' ');
+    const side = labelParts[labelParts.length - 1] || '';
+    const leftOn  = (side === 'L');
+    const rightOn = (side === 'R');
+
+    if (nadiLeft)  nadiLeft.setAttribute('opacity',  leftOn  ? '0.85' : '0.18');
+    if (nadiRight) nadiRight.setAttribute('opacity', rightOn ? '0.85' : '0.18');
+    if (nadiLeftAir)  nadiLeftAir.setAttribute('opacity',  leftOn  ? '1' : '0');
+    if (nadiRightAir) nadiRightAir.setAttribute('opacity', rightOn ? '1' : '0');
+  }
+
   function renderFrame() {
     const tech = getTech();
     const scene = scenes[tech.id];
@@ -2933,7 +3189,6 @@
       el.setAttribute('r', (parseFloat(el.dataset.base) * scale).toFixed(2));
     }
 
-    // HUD number
     if (phase.open) {
       const secs = Math.floor(state.phaseElapsed / 1000);
       if (secs !== state.lastNum) {
@@ -2986,17 +3241,18 @@
     state.lastNum = null;
 
     holdHint.classList.toggle('show', !!phase.open);
+    updateNadiVisual(phase.label);
 
     if (!silent) {
       if (state.chime) {
         ensureAudio();
         playChime(phase.key, phase.chime);
       }
+      if (state.soundProfile !== 'ambient') playTransition();
       if (state.drone) {
         ensureAudio();
         modulateDrone(phase.key);
       }
-
       if (hudLabel.animate) {
         hudLabel.animate(
           [{ opacity: 0.0 }, { opacity: 1.0 }],
@@ -3030,7 +3286,6 @@
       );
     }
 
-    // Smart session block advance
     if (state.smart.active) {
       state.smart.cyclesDone += 1;
       const block = state.smart.blocks[state.smart.index];
@@ -3068,6 +3323,7 @@
       applyPhaseColor(phase.key);
       hudLabel.textContent = phase.label.toUpperCase();
       hudNum.textContent = phase.open ? '0' : String(phase.dur);
+      updateNadiVisual(phase.label);
     }
 
     holdHint.classList.remove('show');
@@ -3082,7 +3338,6 @@
     const phase = tech.phases[state.phaseIndex];
 
     if (state.playing && phase && phase.open) {
-      // Release the open hold → advance
       const next = (state.phaseIndex + 1) % tech.phases.length;
       if (next === 0) onCycleComplete();
       enterPhase(next, false);
@@ -3119,14 +3374,12 @@
       const tech = getTech();
       state.phaseElapsed += dt;
 
-      // session time accounting
       if (state.session.active) {
         const cur = getTech();
         const entry = state.session.accum[cur.id] || (state.session.accum[cur.id] = { name: cur.name, ms: 0 });
         entry.ms += dt;
       }
 
-      // smart session elapsed
       if (state.smart.active) {
         state.smart.elapsedMs += dt;
         updateSmartBar();
@@ -3139,7 +3392,6 @@
         state.phaseElapsed -= phase.dur * 1000;
         const next = (state.phaseIndex + 1) % tech.phases.length;
         if (next === 0) onCycleComplete();
-        // if the smart session switched technique inside onCycleComplete, break out
         if (getTech() !== tech) break;
         enterPhase(next, false);
         phase = tech.phases[state.phaseIndex];
@@ -3160,6 +3412,7 @@
       scenes[k].trackG.style.opacity = on ? '1' : '0';
       scenes[k].ringG.style.opacity  = on ? '1' : '0';
     });
+    nadiLayer.classList.toggle('show', id === 'nadi');
   }
 
   function updateTechChip() {
@@ -3194,7 +3447,6 @@
 
     resetPlayback();
     updateChromeHeight();
-
     startSession();
 
     requestAnimationFrame(() => {
@@ -3259,7 +3511,6 @@
     resetPlayback();
     updateChromeHeight();
     updateSmartBar();
-
     startSession();
 
     requestAnimationFrame(() => {
@@ -3287,7 +3538,6 @@
     setActiveScene(block.techId);
     updateTechChip();
 
-    // Soft re-entry: keep playing, reset the phase machine
     state.phaseIndex = 0;
     state.phaseElapsed = 0;
     state.ringStart = state.breath;
@@ -3305,11 +3555,11 @@
     }
     applyHudLayout();
 
-    // tiny chime to signal the switch (only if enabled)
     if (state.chime) {
       ensureAudio();
       playChime('inhale', 660);
     }
+    if (state.soundProfile !== 'ambient') playTransition();
 
     enterPhase(0, true);
     updateSmartBar();
@@ -3390,7 +3640,7 @@
     })).filter((x) => x.seconds > 0);
 
     const totalSec = techs.reduce((s, x) => s + x.seconds, 0);
-    if (totalSec < 15) return; // ignore tiny blips
+    if (totalSec < 15) return;
 
     const startedAt = sess.startedAt || Date.now();
     const record = {
@@ -3516,11 +3766,7 @@
 
   async function renderDashboard() {
     let sessions = [];
-    try {
-      sessions = await idb.getAll();
-    } catch (e) {
-      sessions = [];
-    }
+    try { sessions = await idb.getAll(); } catch (e) { sessions = []; }
 
     const totalSec = sessions.reduce((s, x) => s + (x.durationSec || 0), 0);
     $('statTotal').textContent = totalSec ? fmtDuration(totalSec) : '0m';
@@ -3528,7 +3774,6 @@
     $('statAvg').textContent = sessions.length ? fmtDuration(totalSec / sessions.length) : '0m';
     $('statStreak').textContent = String(computeStreak(sessions));
 
-    // Daily chart — last 14 days
     const chart = $('chartBars');
     chart.innerHTML = '';
     const dayMap = {};
@@ -3568,7 +3813,6 @@
       chart.appendChild(col);
     });
 
-    // Technique breakdown
     const breakdown = $('techBreakdown');
     breakdown.innerHTML = '';
     const techMap = {};
@@ -3601,7 +3845,6 @@
       });
     }
 
-    // Recent sessions
     const recent = $('recentList');
     recent.innerHTML = '';
     const sorted = sessions.slice().sort((a, b) => (b.startedAt || 0) - (a.startedAt || 0)).slice(0, 8);
@@ -3634,7 +3877,6 @@
     let streak = 0;
     const d = new Date();
     d.setHours(0, 0, 0, 0);
-    // allow today or yesterday to start the streak
     if (!set.has(dateKey(d.getTime()))) {
       d.setDate(d.getDate() - 1);
       if (!set.has(dateKey(d.getTime()))) return 0;
@@ -3647,7 +3889,7 @@
   }
 
   /* =========================================================
-     HISTORY (for TV / browser back)
+     HISTORY
      ========================================================= */
   function pushHistory() {
     try {
@@ -3673,7 +3915,6 @@
     const k = (ev.key || '').toLowerCase();
     const code = ev.code || '';
 
-    // Space
     if (code === 'Space' || k === ' ') {
       if (state.inBreathView) {
         ev.preventDefault();
@@ -3682,7 +3923,6 @@
       return;
     }
 
-    // Escape
     if (k === 'escape' || k === 'esc') {
       if (state.recording) { setRecording(false); return; }
       if (dashModal.classList.contains('open')) { closeDashboard(); return; }
@@ -3691,7 +3931,6 @@
       return;
     }
 
-    // 0 = Back (TV remote friendly)
     if (k === '0' || code === 'Numpad0') {
       if (state.recording) { setRecording(false); return; }
       if (dashModal.classList.contains('open')) { closeDashboard(); return; }
@@ -3700,7 +3939,6 @@
       return;
     }
 
-    // 1–8 technique shortcuts
     if (k >= '1' && k <= '8') {
       const idx = parseInt(k, 10) - 1;
       const tech = TECHNIQUES[idx];
@@ -3750,11 +3988,10 @@
       return;
     }
 
-    // Simple linear focus navigation (helps some TV browsers)
     if (['arrowright', 'arrowdown', 'arrowleft', 'arrowup'].indexOf(k) !== -1) {
-      if (!state.inBreathView && dashModal.classList.contains('open') === false) {
+      if (!state.inBreathView && !dashModal.classList.contains('open') && !settingsPanel.classList.contains('open')) {
         const focusables = Array.prototype.slice.call(
-          document.querySelectorAll('#welcomeView button, #welcomeView [data-nav], #ytFloat')
+          document.querySelectorAll('#welcomeView button, #welcomeView [data-nav], #ytFloat, #customMin')
         ).filter((el) => el.offsetParent !== null);
         if (focusables.length) {
           const cur = document.activeElement;
@@ -3801,6 +4038,15 @@
       setDroneActive(!state.drone);
     });
 
+    $$('#soundSeg button').forEach((b) => {
+      b.addEventListener('click', () => {
+        state.soundProfile = b.dataset.sound;
+        $$('#soundSeg button').forEach((x) => x.classList.toggle('active', x === b));
+        ensureAudio();
+        applySoundProfile();
+      });
+    });
+
     $('borderSwitch').addEventListener('click', () => {
       state.border = !state.border;
       updateBorder();
@@ -3814,7 +4060,6 @@
       }
     });
 
-    // Breath view chrome
     $('backBtn').addEventListener('click', goBackToWelcome);
     $('recBtn').addEventListener('click', () => setRecording(!state.recording));
     $('exitRecBtn').addEventListener('click', () => setRecording(false));
@@ -3822,7 +4067,6 @@
     $('settingsClose').addEventListener('click', closeSettings);
     settingsBackdrop.addEventListener('click', closeSettings);
 
-    // Dashboard
     $('dashOpenBtnWelcome').addEventListener('click', openDashboard);
     $('dashOpenBtn').addEventListener('click', openDashboard);
     $('dashClose').addEventListener('click', closeDashboard);
@@ -3833,21 +4077,30 @@
       renderDashboard();
     });
 
-    // Smart session
+    /* Smart session */
     let smartMinutes = 5;
     $$('#durChips button').forEach((b) => {
       b.addEventListener('click', () => {
         $$('#durChips button').forEach((x) => x.classList.remove('active'));
         b.classList.add('active');
         smartMinutes = parseInt(b.dataset.min, 10);
+        $('customMin').value = smartMinutes;
       });
+    });
+    $('customMin').addEventListener('input', (e) => {
+      const v = parseInt(e.target.value, 10);
+      if (!isNaN(v) && v >= 1 && v <= 60) {
+        smartMinutes = v;
+        $$('#durChips button').forEach((x) => x.classList.remove('active'));
+      }
     });
     $('smartStart').addEventListener('click', (e) => {
       e.stopPropagation();
-      startSmartSession(smartMinutes * 60);
+      const custom = parseInt($('customMin').value, 10);
+      const mins = (!isNaN(custom) && custom >= 1 && custom <= 60) ? custom : smartMinutes;
+      startSmartSession(mins * 60);
     });
 
-    // Stage click — toggle play / release hold
     stage.addEventListener('click', (e) => {
       if (state.recording) return;
       if (e.target.closest('#cycleBadge')) return;
@@ -3871,7 +4124,6 @@
     window.addEventListener('pointerdown', unlock);
     window.addEventListener('keydown', unlock);
 
-    // Recording mode: hover near top-left reveals exit
     let hoverTimer = null;
     const exitBtn = $('exitRecBtn');
     document.addEventListener('mousemove', (e) => {
@@ -3893,11 +4145,10 @@
     bindUI();
 
     setLang('en');
-    setTheme('light');       // default: light
+    setTheme('light');
     state.border = true;
     updateBorder();
 
-    // defaults: chime OFF, drone ON
     state.chime = false;
     state.drone = true;
     $('chimeSwitch').classList.remove('on');
@@ -3905,7 +4156,9 @@
     $('droneSwitch').classList.add('on');
     $('droneSwitch').setAttribute('aria-checked', 'true');
 
-    // warm up IndexedDB (fails silently in private mode)
+    state.soundProfile = 'full';
+    $$('#soundSeg button').forEach((b) => b.classList.toggle('active', b.dataset.sound === 'full'));
+
     idb.open().catch(() => {});
 
     requestAnimationFrame(() => {
