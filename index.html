@@ -1917,7 +1917,7 @@
         <button data-sound="ambient" data-i18n="sound.ambient">Ambient</button>
         <button data-sound="solfeggio" data-i18n="sound.solfeggio">Solfeggio</button>
         <button data-sound="binaural" data-i18n="sound.binaural">Binaural</button>
-        <button data-sound="full" class="active" data-i18n="sound.full">Full</button>
+        <button data-sound="full" data-i18n="sound.full">Full</button>
       </div>
       <p class="sp-hint" data-i18n="settings.soundHint">Solfeggio tones resonate with specific energy centres. Binaural beats gently entrain brainwaves (Theta for calm, Beta for focus). Choose Off to disable all background tones.</p>
 
@@ -2795,7 +2795,7 @@
     border: true,
     drone: true,
     chime: false,
-    soundProfile: 'full',
+    soundProfile: 'ambient',
     volume: 0.55,
     inBreathView: false,
     smart: {
@@ -4425,8 +4425,8 @@
     $('droneSwitch').classList.add('on');
     $('droneSwitch').setAttribute('aria-checked', 'true');
 
-    state.soundProfile = 'full';
-    $$('#soundSeg button').forEach((b) => b.classList.toggle('active', b.dataset.sound === 'full'));
+   state.soundProfile = 'ambient';
+$$('#soundSeg button').forEach((b) => b.classList.toggle('active', b.dataset.sound === 'ambient'));
 
     idb.open().catch(() => {});
 
